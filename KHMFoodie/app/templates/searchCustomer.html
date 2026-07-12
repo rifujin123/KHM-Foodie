@@ -1,0 +1,343 @@
+{% extends "layout/baseCustomer.html" %}
+
+{% block content %}
+<!-- Search Bar -->
+<div id="search-bar" class="sticky top-20 z-40 bg-surface pb-sm">
+    <div class="relative max-w-2xl mx-auto">
+        <span
+            class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant">search</span>
+        <input type="text" value="pizza" class="w-full pl-12 pr-16 py-3 bg-surface-container-low border border-outline-variant rounded-full 
+                      focus:ring-2 focus:ring-primary focus:outline-none transition-all font-body-lg text-body-lg"
+            placeholder="Tìm món ăn hoặc nhà hàng..." />
+        <button
+            class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primary text-on-primary px-5 py-1.5 rounded-full font-label-md hover:opacity-90 transition-opacity">
+            Tìm
+        </button>
+    </div>
+</div>
+<div class="flex flex-col md:flex-row gap-lg items-start">
+    <!-- Bộ Lọc -->
+    <aside id="filter-sidebar" class="w-full md:w-64 flex-shrink-0 space-y-lg md:sticky md:top-[160px] md:h-fit">
+        <div class="flex items-center justify-between">
+            <h2 class="font-headline-md text-headline-md">Bộ lọc</h2>
+            <button class="text-primary font-label-md hover:underline">Xóa tất cả</button>
+        </div>
+        <!-- Sắp Xếp Theo -->
+        <div class="space-y-sm">
+            <h3 class="font-label-md text-secondary-fixed-variant uppercase tracking-wider text-[11px]">Sắp xếp theo
+            </h3>
+            <div class="flex flex-col gap-xs">
+                <label class="flex items-center gap-xs cursor-pointer group no-bounce">
+                    <input type="radio" name="sort" checked="" class="text-primary focus:ring-primary border-outline">
+                    <span class="text-body-md group-hover:text-primary transition-colors">Phù hợp nhất</span>
+                </label>
+                <label class="flex items-center gap-xs cursor-pointer group no-bounce">
+                    <input type="radio" name="sort" class="text-primary focus:ring-primary border-outline">
+                    <span class="text-body-md group-hover:text-primary transition-colors">Đánh giá cao nhất</span>
+                </label>
+                <label class="flex items-center gap-xs cursor-pointer group no-bounce">
+                    <input type="radio" name="sort" class="text-primary focus:ring-primary border-outline">
+                    <span class="text-body-md group-hover:text-primary transition-colors">Gần nhất</span>
+                </label>
+            </div>
+        </div>
+        <!-- Mức Giá - Range Slider -->
+        <div class="space-y-sm">
+            <h3 class="font-label-md text-secondary-fixed-variant uppercase tracking-wider text-[11px]">Mức giá</h3>
+            <div class="space-y-xs">
+                <div class="flex justify-between text-caption text-on-surface-variant">
+                    <span>0đ</span>
+                    <span id="price-display">50.000đ - 150.000đ</span>
+                    <span>500.000đ</span>
+                </div>
+                <div class="relative h-2 bg-surface-container-high rounded-full">
+                    <div id="price-track" class="absolute h-full bg-primary rounded-full"
+                        style="left: 10%; right: 30%;"></div>
+                    <input type="range" id="price-min" min="0" max="500" value="50" step="5"
+                        class="absolute inset-0 w-full h-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer
+                   [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer">
+                    <input type="range" id="price-max" min="0" max="500" value="150" step="5"
+                        class="absolute inset-0 w-full h-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer
+                   [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer">
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Horizontal Scroll -->
+        <div class="md:hidden overflow-x-auto flex gap-xs no-scrollbar pb-xs">
+            <span class="flex-none px-4 py-2 bg-primary text-white rounded-full font-label-md">Pizza</span>
+            <span
+                class="flex-none px-4 py-2 bg-white border border-outline-variant rounded-full font-label-md text-secondary">Healthy</span>
+            <span
+                class="flex-none px-4 py-2 bg-white border border-outline-variant rounded-full font-label-md text-secondary">Fast
+                Delivery</span>
+            <span
+                class="flex-none px-4 py-2 bg-white border border-outline-variant rounded-full font-label-md text-secondary">Promotions</span>
+        </div>
+    </aside>
+    <!-- Content Area -->
+    <div class="flex-1 space-y-xl">
+        <!-- Nhà hàng phù hợp-->
+        <section class="space-y-md">
+            <div class="flex justify-between items-end">
+                <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg">Nhà hàng phù hợp</h2>
+                <a href="#" class="text-primary font-label-md flex items-center gap-xs">Xem tất cả <span
+                        class="material-symbols-outlined text-[18px]">chevron_right</span></a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
+                <!-- Restaurant Card 1 -->
+                <div
+                    class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative h-48">
+                        <img class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe9xyx9kXPkcbyu9bU1Ie1LCUlKFONcTogqRbXcCf9SKXOSYipSHzYmBXek2fds_7A3MLuNYzKUNra4Vfky8vCzu9Y9IZWhamC8BSCeNVZ-COWywYA-nEeWJkaPakBatEdyFwco0itbBuLVQXkU_U6UAvYb60AXkVmfdhCyxRfZsh5_LDtrl8diaqQbsc9QWow40AteNi299_8aFSaRem6xNj8ATpG0rwciYDo_bcJ0C6sGrhHoT7R-3D27DS9SIccTYyXoBhrZfqH">
+                        <div
+                            class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-caption font-bold">4.8</span>
+                        </div>
+                    </div>
+                    <div class="p-sm space-y-xs">
+                        <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">Pizza
+                            Lab - Experimental Flavors</h3>
+                        <div class="flex items-center gap-sm text-secondary font-label-md">
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="">25-30 ph</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">near_me</span>
+                                <span class="">1.2 km</span>
+                            </div>
+                        </div>
+                        <div class="pt-xs border-t border-surface-container flex justify-between items-center">
+                            <span class="text-primary font-label-md flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">delivery_dining</span> Miễn phí giao
+                                hàng
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Restaurant Card 2 -->
+                <div
+                    class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative h-48">
+                        <img class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6504rkPvaxX3MfUUypaiOwh19pFIMZsBVRHEXf0HTKYXFU4j3h5_RYNJQ2URuB956yvT8LJVnUCrLshsu0YyJUWtlcKvmmuggrfERzdA9ON0p062XSNCJqOfZ_VmMWwKCrmWi1g_Zhmp7vJtCyk8DBfO9Z5P6yvdKZXu9eeiXrIPzauKxHO3fdoF4RXT-gbKni_YchVTvOwtwRC8mVFDTvr03CGKvBeDWJfTW-2EOGpTtBwwiBSKTFaeXa0NsPtA5XUYxctiBINZR">
+                        <div
+                            class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-caption font-bold">4.6</span>
+                        </div>
+                    </div>
+                    <div class="p-sm space-y-xs">
+                        <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">The
+                            Italian Corner</h3>
+                        <div class="flex items-center gap-sm text-secondary font-label-md">
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="">15-20 ph</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">near_me</span>
+                                <span class="">0.8 km</span>
+                            </div>
+                        </div>
+                        <div class="pt-xs border-t border-surface-container flex justify-between items-center">
+                            <span class="text-on-surface-variant font-label-md">Phí giao: 15.000đ</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Restaurant Card 3 -->
+                <div
+                    class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative h-48">
+                        <img class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK6kf8gJflo9SIu-tKfYmqZ3mWl8m0ZSug72qMYMPBbnuWpl2FFMKo7A3b317DZ_ucMdtkRZojwfwmf-ltdEbtZOfeLGvMp3Da_HS3KIwme31CH5dSHJL9qZTHrXPF-Qt9pHmICKh6lvsfK0MXQe68znE2QEohNdjVFYLuRI-yQemAMp9oDUYmXNPTjm50CccxecQK5VceDOkpsxZ3B_jFVeNcSN5TUyWx5HR57xjFyb5ZL563ei8rhLERLGZbTrQwfKpqB-nxYKVI">
+                        <div
+                            class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-caption font-bold">4.9</span>
+                        </div>
+                    </div>
+                    <div class="p-sm space-y-xs">
+                        <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">Napoli
+                            Authentic Pizza</h3>
+                        <div class="flex items-center gap-sm text-secondary font-label-md">
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="">35-40 ph</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">near_me</span>
+                                <span class="">2.5 km</span>
+                            </div>
+                        </div>
+                        <div class="pt-xs border-t border-surface-container flex justify-between items-center">
+                            <span class="text-primary font-label-md flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">delivery_dining</span> Miễn phí giao
+                                hàng
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
+                <!-- Restaurant Card 1 -->
+                <div
+                    class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative h-48">
+                        <img class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe9xyx9kXPkcbyu9bU1Ie1LCUlKFONcTogqRbXcCf9SKXOSYipSHzYmBXek2fds_7A3MLuNYzKUNra4Vfky8vCzu9Y9IZWhamC8BSCeNVZ-COWywYA-nEeWJkaPakBatEdyFwco0itbBuLVQXkU_U6UAvYb60AXkVmfdhCyxRfZsh5_LDtrl8diaqQbsc9QWow40AteNi299_8aFSaRem6xNj8ATpG0rwciYDo_bcJ0C6sGrhHoT7R-3D27DS9SIccTYyXoBhrZfqH">
+                        <div
+                            class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-caption font-bold">4.8</span>
+                        </div>
+                    </div>
+                    <div class="p-sm space-y-xs">
+                        <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">Pizza
+                            Lab - Experimental Flavors</h3>
+                        <div class="flex items-center gap-sm text-secondary font-label-md">
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="">25-30 ph</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">near_me</span>
+                                <span class="">1.2 km</span>
+                            </div>
+                        </div>
+                        <div class="pt-xs border-t border-surface-container flex justify-between items-center">
+                            <span class="text-primary font-label-md flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">delivery_dining</span> Miễn phí giao
+                                hàng
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Restaurant Card 2 -->
+                <div
+                    class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative h-48">
+                        <img class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6504rkPvaxX3MfUUypaiOwh19pFIMZsBVRHEXf0HTKYXFU4j3h5_RYNJQ2URuB956yvT8LJVnUCrLshsu0YyJUWtlcKvmmuggrfERzdA9ON0p062XSNCJqOfZ_VmMWwKCrmWi1g_Zhmp7vJtCyk8DBfO9Z5P6yvdKZXu9eeiXrIPzauKxHO3fdoF4RXT-gbKni_YchVTvOwtwRC8mVFDTvr03CGKvBeDWJfTW-2EOGpTtBwwiBSKTFaeXa0NsPtA5XUYxctiBINZR">
+                        <div
+                            class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-caption font-bold">4.6</span>
+                        </div>
+                    </div>
+                    <div class="p-sm space-y-xs">
+                        <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">The
+                            Italian Corner</h3>
+                        <div class="flex items-center gap-sm text-secondary font-label-md">
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="">15-20 ph</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">near_me</span>
+                                <span class="">0.8 km</span>
+                            </div>
+                        </div>
+                        <div class="pt-xs border-t border-surface-container flex justify-between items-center">
+                            <span class="text-on-surface-variant font-label-md">Phí giao: 15.000đ</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Restaurant Card 3 -->
+                <div
+                    class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300">
+                    <div class="relative h-48">
+                        <img class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK6kf8gJflo9SIu-tKfYmqZ3mWl8m0ZSug72qMYMPBbnuWpl2FFMKo7A3b317DZ_ucMdtkRZojwfwmf-ltdEbtZOfeLGvMp3Da_HS3KIwme31CH5dSHJL9qZTHrXPF-Qt9pHmICKh6lvsfK0MXQe68znE2QEohNdjVFYLuRI-yQemAMp9oDUYmXNPTjm50CccxecQK5VceDOkpsxZ3B_jFVeNcSN5TUyWx5HR57xjFyb5ZL563ei8rhLERLGZbTrQwfKpqB-nxYKVI">
+                        <div
+                            class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-tertiary text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-caption font-bold">4.9</span>
+                        </div>
+                    </div>
+                    <div class="p-sm space-y-xs">
+                        <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">Napoli
+                            Authentic Pizza</h3>
+                        <div class="flex items-center gap-sm text-secondary font-label-md">
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="">35-40 ph</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[18px]">near_me</span>
+                                <span class="">2.5 km</span>
+                            </div>
+                        </div>
+                        <div class="pt-xs border-t border-surface-container flex justify-between items-center">
+                            <span class="text-primary font-label-md flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">delivery_dining</span> Miễn phí giao
+                                hàng
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<script>
+    window.addEventListener('scroll', function () {
+        const header = document.querySelector('header');
+
+        const searchBar = document.querySelector('#search-bar');
+        if (searchBar) {
+            const headerHeight = header.offsetHeight;
+            searchBar.style.top = headerHeight + 'px';
+        }
+
+        const sidebar = document.querySelector('#filter-sidebar');
+        if (sidebar && window.innerWidth >= 768) {
+            const searchBarHeight = searchBar ? searchBar.offsetHeight : 0;
+            sidebar.style.top = (header.offsetHeight + searchBarHeight) + 'px';
+        }
+    });
+
+    window.dispatchEvent(new Event('scroll'));
+
+
+    const priceMin = document.getElementById('price-min');
+    const priceMax = document.getElementById('price-max');
+    const priceDisplay = document.getElementById('price-display');
+    const priceTrack = document.getElementById('price-track');
+
+    function updatePrice() {
+        const min = parseInt(priceMin.value);
+        const max = parseInt(priceMax.value);
+
+        if (min > max) {
+            if (this === priceMin) priceMin.value = max;
+            else priceMax.value = min;
+        }
+
+        const minVal = parseInt(priceMin.value);
+        const maxVal = parseInt(priceMax.value);
+        const pMin = (minVal / 500) * 100;
+        const pMax = (maxVal / 500) * 100;
+
+        priceTrack.style.left = pMin + '%';
+        priceTrack.style.right = (100 - pMax) + '%';
+
+        const fmt = (v) => Math.round(v) + '.000đ';
+        priceDisplay.textContent = fmt(minVal) + ' - ' + fmt(maxVal);
+    }
+
+    priceMin.addEventListener('input', updatePrice);
+    priceMax.addEventListener('input', updatePrice);
+    updatePrice();
+</script>
+{% endblock %}
