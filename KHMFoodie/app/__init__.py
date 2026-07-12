@@ -5,12 +5,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
+from app.extensions import db
 import cloudinary
 
 
 load_dotenv()
 
-db = SQLAlchemy()
 login_manager = LoginManager()
 
 
