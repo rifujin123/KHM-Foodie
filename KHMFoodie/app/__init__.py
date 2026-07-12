@@ -5,13 +5,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
+from app.extensions import db
 import cloudinary
 
 
 load_dotenv()
 
-db = SQLAlchemy()
 login_manager = LoginManager()
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models.model import User
+    return User.query.get(int(user_id))
+
 
 
 cloudinary.config(
@@ -30,7 +37,8 @@ def create_app(config_name='dev'):
     db.init_app(app)
 
     from app.routes import register_routes
-
     register_routes(app)
+    from app.routes.routes_API.index import route_api
+    route_api(app)
 
     return app
