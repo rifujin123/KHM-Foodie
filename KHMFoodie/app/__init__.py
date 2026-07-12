@@ -30,7 +30,8 @@ def create_app(config_name='dev'):
     db.init_app(app)
 
     from app.routes import register_routes
-
     register_routes(app)
+    from app.routes.routes_API.index import route_api
+    route_api(app)
 
     return app
