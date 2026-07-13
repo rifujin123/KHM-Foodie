@@ -1,10 +1,10 @@
 const hero_datas = {
     'morning': {
-        'section_bg': "linear-gradient(to top right, #ecfdf5, #f0fdfa, #ecfeff)",
-        'chip_bg': "rgba(5,150,105,0.15)", 'chip_text': "#14532d",
-        'title_color': "#14532d", 'desc_color': "#14532dcc",
-        'btn_primary_bg': "#14532d", 'btn_primary_text': "white",
-        'btn_secondary_border': "#14532d", 'btn_secondary_text': "#14532d",
+        'section_bg': "linear-gradient(135deg, #f97316 0%, #f59e0b 40%, #fde68a 100%)",
+        'chip_bg': "rgba(255,255,255,0.25)", 'chip_text': "#ffffff",
+        'title_color': "#ffffff", 'desc_color': "rgba(255,255,255,0.9)",
+        'btn_primary_bg': "#ffffff", 'btn_primary_text': "#ea580c",
+        'btn_secondary_border': "#ffffff", 'btn_secondary_text': "#ffffff",
         'icon': "wb_sunny", 'greeting': "Chào buổi sáng tươi đẹp!",
         'title': "Bữa sáng ngon miệng cho bạn",
         'desc': "Hôm nay AI của chúng tôi gợi ý bạn một bữa sáng cân bằng dinh dưỡng. Đặt ngay để nhận ưu đãi miễn phí vận chuyển!",
@@ -39,7 +39,12 @@ const hero_datas = {
 
 const DEFAULT_HERO_DATA = hero_datas['morning'];
 
-const current_period = 'evening';
+function getTimePeriod() {
+    const h = new Date().getHours();
+    if (h < 12) return 'morning';
+    if (h < 16) return 'afternoon';
+    return 'evening';
+}
 
 const restaurantList = [
     { 'name': 'Pizza Lab - Artisan Pizza', 'cuisine': 'Pizza Ý, Đồ Âu, Salad', 'rating': '4.8', 'time': '20-30 phút', 'fee': 'Miễn phí', 'dist': '1.2km', 'img': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCemJHkWhaP2n1luejRMNSoyv6vijXwjtLjg4NpEaIR_Vju-kusc86HbMg8KDgGIrmY_Avq7hp-JKjWA30xiGvv0vd77z-XQ8rsgYg5QC5TG_JYM0PwfB9IdJvljPj7hqm1KmepOSdbddIKW2_7PPTuIdKKUOsjD1EbSOK3S_KQTsCmc-r8uue0MRms-kMSl7Z7h0GIxB5CpEo6CvcMyWCGAAF63lBr96sl1PB86CtcGad0stEXeARB2TmM-YEMfkNTpJcAsj_vDas', 'alt': 'Modern facade of a trendy artisan pizza restaurant' },
@@ -84,7 +89,7 @@ const suggestions = [
 // }
 
 async function loadRestaurants(){
-    const res = await fetch('http://localhost:5000/api/restaurants/');
+    const res = await fetch('/api/restaurants/');
     const data = await res.json();
     return data.data;
 }

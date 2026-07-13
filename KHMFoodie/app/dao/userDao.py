@@ -1,6 +1,18 @@
+from app.models.model import User, hash_password
+from app.extensions import db
 import hashlib
 from app import db
 from app.models.model import User, Restaurant, UserRole
+
+class UserDao:
+
+    @staticmethod
+    def get_by_username(username):
+        return User.query.filter_by(username=username).first()
+
+    @staticmethod
+    def get_by_id(user_id):
+        return User.query.get(int(user_id))
 
 def add_user(
     name,
