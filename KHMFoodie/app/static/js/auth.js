@@ -14,8 +14,8 @@ document.querySelectorAll('button').forEach(btn => {
     });
 });
 
-// Login form submission — call API
-document.querySelector('form').addEventListener('submit', async (e) => {
+// Login form
+document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
     const username = document.getElementById('identity').value.trim();
@@ -37,9 +37,7 @@ document.querySelector('form').addEventListener('submit', async (e) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password, remember })
         });
-
         const data = await res.json();
-
         if (res.ok) {
             window.location.href = '/';
         } else {
@@ -49,6 +47,48 @@ document.querySelector('form').addEventListener('submit', async (e) => {
         alert('Lỗi kết nối đến máy chủ');
     } finally {
         btn.innerText = originalText;
+        btn.disabled = false;
+    }
+});
+
+// Register form
+document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const data = {
+        name: document.getElementById('full_name').value.trim(),
+        username: document.getElementById('username').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password: document.getElementById('password').value.trim(),
+        confirm_password: document.getElementById('confirm_password').value.trim(),
+    };
+
+    if (!data.name || !data.username || !data.email || !data.phone || !data.password || !data.confirm_password) {
+        alert('Vui lòng điền đầy đủ thông tin');
+        return;
+    }
+
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Đang xử lý...';
+
+    try {
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (res.ok) {
+            window.location.href = '/login';
+        } else {
+            alert(result.message || 'Đăng ký thất bại');
+        }
+    } catch (err) {
+        alert('Lỗi kết nối đến máy chủ');
+    } finally {
+        btn.innerHTML = originalText;
         btn.disabled = false;
     }
 });

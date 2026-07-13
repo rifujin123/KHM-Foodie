@@ -148,7 +148,7 @@
 <h2 class="font-headline-lg text-headline-lg text-on-surface mb-base">Đăng nhập</h2>
 <p class="font-body-md text-body-md text-on-surface-variant">Vui lòng nhập thông tin tài khoản của bạn</p>
 </div>
-<form class="space-y-sm">
+<form id="loginForm" class="space-y-sm">
 <!-- Email/Phone Field -->
 <div class="space-y-base">
 <label class="font-label-md text-label-md text-on-surface-variant block" for="identity">Username</label>
@@ -211,7 +211,7 @@
 <div class="mt-xl text-center">
 <p class="font-body-md text-body-md text-on-surface-variant">
                         Chưa có tài khoản?
-                        <a class="text-primary font-headline-md text-label-md ml-xs hover:underline transition-all" href="#">Đăng ký ngay</a>
+                        <a class="text-primary font-headline-md text-label-md ml-xs hover:underline transition-all" href="/register">Đăng ký ngay</a>
 </p>
 </div>
 </div>
@@ -230,5 +230,5 @@
 <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors cursor-pointer" href="#">Contact</a>
 </div>
 </footer>
-<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </body></html>

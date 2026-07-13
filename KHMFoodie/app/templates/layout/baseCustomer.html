@@ -165,20 +165,19 @@
                         class="absolute top-1 right-1 bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
                 </div>
                 {% if current_user.is_authenticated %}
+                
+                <div class="w-10 h-10 rounded-full border-2 border-outline-variant overflow-hidden">
+                    <img class="w-full h-full object-cover" alt="{{ current_user.name }}"
+                        src="{{ current_user.avatar }}">
+                </div>
+                {% else %}
                 <a href="/login"
                     class="hidden md:flex bg-primary text-on-primary px-6 py-2 rounded-full font-label-md text-label-md hover:opacity-90 scale-95 hover:scale-100 transition-transform duration-150">Tài
                     khoản</a>
                 <div class="w-10 h-10 rounded-full border-2 border-outline-variant overflow-hidden">
-                    <a href="" class="material-symbols-outlined text-on-surface-variant w-full h-full flex items-center justify-center">person</a>
-                    <img class="w-full h-full object-cover" alt="Restaurant manager"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuE79fjBmxHUVv_BvdNlzIEWO9jEKjhClITdvVjkv7Q6EkuGE43EwV37stFCHCRpYHKT0jAAi7F2Hd6twj-NelJZn2Mp61A_6GRzLzV0n7oA_ebudlTpYSAMS-BWvpwuU15Y4hi6XGekAT2Emj4zf4S9lzrLUzB9bGGANOE3WDrttDxzrmDVW3essd2gi_pscfPs3Wnd3IYriEl3ZEB01wna4yewi3M2KEoCkfLLLvnilJN3pNyGwfi7eqgIcgdlapJ-4ytzQ1sT8">
+                    <a href="/login" class="material-symbols-outlined text-on-surface-variant w-full h-full flex items-center justify-center">person</a>
                 </div>
                 {% endif %}
-                <div class="w-10 h-10 rounded-full border-2 border-outline-variant overflow-hidden">
-                    <a href="/login" class="material-symbols-outlined text-on-surface-variant w-full h-full flex items-center justify-center">person</a>
-                    <img class="w-full h-full object-cover" alt="Restaurant manager"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuE79fjBmxHUVv_BvdNlzIEWO9jEKjhClITdvVjkv7Q6EkuGE43EwV37stFCHCRpYHKT0jAAi7F2Hd6twj-NelJZn2Mp61A_6GRzLzV0n7oA_ebudlTpYSAMS-BWvpwuU15Y4hi6XGekAT2Emj4zf4S9lzrLUzB9bGGANOE3WDrttDxzrmDVW3essd2gi_pscfPs3Wnd3IYriEl3ZEB01wna4yewi3M2KEoCkfLLLvnilJN3pNyGwfi7eqgIcgdlapJ-4ytzQ1sT8">
-                </div>
             </div>
         </div>
     </header>
