@@ -153,7 +153,7 @@
 
             <!-- Right-side Actions -->
             <div class="flex items-center gap-2 md:gap-4">
-                
+
                 {% block itemHeader %}
                 {% endblock %}
                 <button
@@ -298,6 +298,31 @@
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'translateY(0)';
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('header-search-input');
+            const searchIcon = document.getElementById('header-search-icon');
+
+            if (!searchInput) return;
+
+            function doSearch() {
+                const q = searchInput.value.trim();
+                if (q) {
+                    window.location.href = '/search_customer?q=' + encodeURIComponent(q);
+                }
+            }
+
+            searchInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    doSearch();
+                }
+            });
+            if (searchIcon) {
+                searchIcon.addEventListener('click', doSearch);
+            }
         });
     </script>
 </body>
