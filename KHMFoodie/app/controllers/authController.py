@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from app.models.model import hash_password
+from app.dao.userDao import add_user
 from app.dao.userDao import UserDao
 from flask_login import login_user, logout_user
 
@@ -60,5 +61,5 @@ class LoginController:
         if UserDao.get_by_username(username):
             return jsonify({"message": "Username already exists"}), 409
 
-        UserDao.create_user(name, username, email, phone, password)
+        add_user(name, username, email, phone, password)
         return jsonify({"message": "Registration successful"}), 201

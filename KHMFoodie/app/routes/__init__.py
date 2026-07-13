@@ -1,3 +1,3 @@
 def register_routes(app):
-    from app.routes.web import main
-    app.register_blueprint(main, url_prefix='/')
+    from app.routes.index import route_web
+    route_web(app)
