@@ -57,7 +57,7 @@
 </section>
 <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 <script>
-    renderHeroSection('evening');
+    renderHeroSection(getTimePeriod());
     
     loadRestaurants().then(r => renderRestaurantList('restaurant-scroll', r));
 
