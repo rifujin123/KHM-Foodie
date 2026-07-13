@@ -89,7 +89,7 @@ const suggestions = [
 // }
 
 async function loadRestaurants(){
-    const res = await fetch('http://localhost:5000/api/restaurants/');
+    const res = await fetch('/api/restaurants/');
     const data = await res.json();
     return data.data;
 }
