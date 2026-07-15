@@ -4,3 +4,8 @@ async function searchRestaurants(keyword) {
     if (!res.ok) throw new Error('Search failed: ' + res.status);
     return res.json();
 }
+
+function goToRestaurantDetail(id) {
+    console.log("Navigating to restaurant detail for id:", id);
+    window.location.href = `/restaurants/${id}`;
+}

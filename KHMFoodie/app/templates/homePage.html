@@ -60,7 +60,10 @@
 <script>
     renderHeroSection(getTimePeriod());
     
-    loadRestaurants().then(r => renderRestaurantList('restaurant-scroll', r));
+    Promise.all([
+        loadRestaurants(),
+        loadRestaurantCardTemplate()
+    ]).then(([restaurants]) => renderRestaurantList('restaurant-scroll', restaurants, 'carousel'));
 
     document.addEventListener('DOMContentLoaded', function () {
         const btnLeft = document.getElementById('scroll-left');
