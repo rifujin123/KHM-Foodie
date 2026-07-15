@@ -72,6 +72,7 @@ class Restaurant(User):
     }
 
 
+
 class DishCategory(RoleEnum):
     APPETIZER = "Món khai vị"
     MAIN_COURSE = "Món chính"
