@@ -136,9 +136,9 @@
         class="bg-surface dark:bg-surface-dim docked full-width top-0 z-50 shadow-[0px_4px_20px_rgba(0,0,0,0.05)] sticky transition-all duration-300">
         <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
             <!-- Brand Logo -->
-            <div class="flex items-center shrink-0">
-                <a href="/"><span
-                    class="font-display-lg text-headline-lg-mobile text-primary dark:text-primary-fixed italic font-black">CraveConnect</span></a>
+            <div class="flex items-center shrink-0" onclick="window.location.href='/'">
+                <span
+                    class="font-display-lg text-headline-lg-mobile text-primary dark:text-primary-fixed italic font-black">CraveConnect</span>
             </div>
 
             <!-- Central Navigation Links -->
@@ -280,6 +280,7 @@
     </nav>
     {% block scripts %}{% endblock %}
     <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
     <script>
         // Micro-interactions and Header Scroll Effect
         window.addEventListener('scroll', () => {

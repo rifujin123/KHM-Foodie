@@ -172,40 +172,39 @@ function renderSuggestions(containerId,data) {
     });
 }
 
-function renderRestaurantList(containerId,data){
+let restaurantCardTemplate = null;
+
+async function loadRestaurantCardTemplate() {
+    if (restaurantCardTemplate) return restaurantCardTemplate;
+    const res = await fetch('/templates/restaurantCard.html');
+    restaurantCardTemplate = await res.text();
+    return restaurantCardTemplate;
+}
+
+async function renderRestaurantList(containerId, data, layout = 'grid') {
     const container = document.getElementById(containerId);
-    if(!container) return;
+    if (!container) return;
+
+    const template = await loadRestaurantCardTemplate();
     container.innerHTML = '';
+
+    const wrapperClass = layout === 'carousel'
+        ? 'min-w-[350px] md:min-w-[380px] snap-start group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-2 transition-all duration-300 restaurant-card'
+        : 'w-full group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-2 transition-all duration-300 restaurant-card';
+
     data.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'min-w-[350px] md:min-w-[380px] snap-start group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-2 transition-all duration-300';
-        div.innerHTML = `
-            <div class="h-48 relative overflow-hidden">
-                <img class="w-full h-full object-cover" src="${r.cover_image}">
-                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur shadow-sm px-2 py-1 rounded-lg flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px] text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="font-bold text-on-surface text-sm">5.0</span>
-                </div>
-            </div>
-            <div class="p-4 space-y-3">
-                <div>
-                    <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">${r.name}</h3>
-                    <p class="text-secondary text-sm font-body-md italic">${r.cuisine_type}</p>
-                </div>
-                 <div>
-                    <p class="text-secondary text-sm font-body-md font-bold">${r.address}</p>
-                </div>
-                <div class="flex items-center gap-4 text-on-surface-variant text-sm border-t border-outline-variant pt-3">
-                    <div class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[18px]">schedule</span>
-                        <span>${r.opening_time} - ${r.closing_time}</span>
-                    </div>
-                    <div class="flex items-center gap-1 ml-auto">
-                        <span class="material-symbols-outlined text-[18px]">distance</span>
-                        <span>10.5 km</span>
-                    </div>
-                </div>
-            </div>`;
-        container.appendChild(div);
+        const innerHtml = template
+            .replace(/\{\{id\}\}/g, r.id || '')
+            .replace(/\{\{cover_image\}\}/g, r.cover_image || '')
+            .replace(/\{\{name\}\}/g, r.name || '')
+            .replace(/\{\{cuisine_type\}\}/g, r.cuisine_type || '')
+            .replace(/\{\{address\}\}/g, r.address || '')
+            .replace(/\{\{opening_time\}\}/g, r.opening_time || '')
+            .replace(/\{\{closing_time\}\}/g, r.closing_time || '');
+
+        const wrapper = document.createElement('div');
+        wrapper.className = wrapperClass;
+        wrapper.innerHTML = innerHtml;
+        container.appendChild(wrapper);
     });
 }

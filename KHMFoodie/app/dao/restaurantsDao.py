@@ -5,7 +5,15 @@ class RestaurantsDao:
     
     @staticmethod
     def get_all_restaurants():
-        return Restaurant.query.filter_by(active=True).all()
+        return Restaurant.query.with_entities(
+            Restaurant.id,
+            Restaurant.cover_image,
+            Restaurant.name,
+            Restaurant.cuisine_type,
+            Restaurant.address,
+            Restaurant.opening_time,
+            Restaurant.closing_time
+        ).filter_by(active=True).all()
 
     @staticmethod
     def get_restaurant_by_id(restaurant_id):
