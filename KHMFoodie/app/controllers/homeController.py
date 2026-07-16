@@ -12,6 +12,9 @@ def login_page():
 def register_page():
     return render_template('registerPage.html')
 
+def register_page_restaurant():
+    return render_template('registerPageRestaurant.html')
+
 @login_required
 def me_page():
     role = current_user.role

@@ -1,9 +1,9 @@
 from flask import request, jsonify, redirect
-from app.models.model import hash_password
-from app.dao.userDao import add_user
+from app.models.model import hash_password, CuisineType, UserRole
+from app.dao.userDao import add_user, check_userEmail
 from app.dao.userDao import UserDao
 from flask_login import login_user, logout_user, login_required, current_user
-
+import cloudinary.uploader
 
 class LoginController:
 
@@ -104,3 +104,58 @@ class LoginController:
 
         add_user(name, phone, username, password, email)
         return jsonify({"message": "Registration successful"}), 201
+
+    @staticmethod
+    def register_restaurant():
+        data = request.form.to_dict() if request.form else request.get_json()
+        if not data:
+            return jsonify({"message": "Invalid JSON"}), 400
+
+        name = data.get("name")
+        username = data.get("username")
+        email = data.get("email")
+        phone = data.get("phone")
+        password = data.get("password")
+        address = data.get("address")
+        cuisine_type = data.get("cuisine_type")
+        tax_code = data.get("tax_code")
+        description = data.get("description")
+
+        if not all([name, username, email, phone, password, address]):
+            return jsonify({"message": "Vui lòng điền đầy đủ thông tin bắt buộc"}), 400
+
+        if UserDao.get_by_username(username):
+            return jsonify({"message": "Tên đăng nhập đã tồn tại"}), 409
+
+        if check_userEmail(email):
+            return jsonify({"message": "Email đã được sử dụng"}), 409
+
+        cuisine_enum = None
+        if cuisine_type:
+            try:
+                cuisine_enum = CuisineType[cuisine_type]
+            except (KeyError, ValueError):
+                pass
+
+        avatar_path = None
+        avatar_file = request.files.get("avatar")
+        if avatar_file and avatar_file.filename:
+            res = cloudinary.uploader.upload(avatar_file)
+            avatar_path = res["secure_url"]
+
+        add_user(
+            name=name,
+            phonenumber=phone,
+            username=username,
+            password=password,
+            email=email,
+            address=address,
+            is_restaurant=True,
+            role=UserRole.RESTAURANT,
+            description=description,
+            cuisine_type=cuisine_enum,
+            tax_code=tax_code,
+            avatar=avatar_path,
+            cover_image=avatar_path,
+        )
+        return jsonify({"message": "Đăng ký nhà hàng thành công!"}), 201
