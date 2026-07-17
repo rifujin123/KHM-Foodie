@@ -76,6 +76,7 @@ def add_user(
             cuisine_type=kwargs.get('cuisine_type'),
             tax_code=kwargs.get('tax_code'),
             cover_image=kwargs.get('cover_image'),
+            active=False
         )
     else:
         user = User(**common_data)

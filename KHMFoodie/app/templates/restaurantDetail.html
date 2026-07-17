@@ -1,4 +1,4 @@
-{% extends "layout/baseCustomer.html" %}
+﻿{% extends "layout/baseCustomer.html" %}
 
 {% block content %}
 <div class="restaurant-detail">
@@ -83,15 +83,20 @@
                             class="px-md py-xs rounded-full bg-primary text-white font-label-md whitespace-nowrap">Tất
                             cả</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món chính</button>
+                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món
+                            chính</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món khai vị</button>
+                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món
+                            khai vị</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món tráng miệng</button>
+                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món
+                            tráng miệng</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Đồ uống</button>
+                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Đồ
+                            uống</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Đồ ăn kèm</button>
+                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Đồ
+                            ăn kèm</button>
                     </div>
 
                     <div id="dish-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md pb-md">
@@ -230,9 +235,8 @@
                 </div>
             </div>
         </div>
-
-        {% include "partials/tabReviews.html" %}
-                        <div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
+        <div id="tab-reviews" class="tab-panel hidden">
+            <div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
                             <h2 class="font-headline-md text-headline-md mb-md">Tóm tắt đánh giá</h2>
                             <div class="flex items-center gap-lg mb-lg">
                                 <div class="text-center">
@@ -503,7 +507,7 @@
                                             cảm ơn bạn đã góp ý. Pizza Lab xin ghi nhận về phần salad và sẽ điều
                                             chỉnh ngay. Rất mong được phục vụ bạn lần tới!</p>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
                         </section>
                         <div class="flex justify-center py-md">
@@ -512,31 +516,33 @@
                                 thêm đánh giá</button>
                         </div>
                     </div>
-                </div>
-            </main>
-
-            <nav
-                class="fixed bottom-0 w-full rounded-t-xl z-50 md:hidden bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-md shadow-[0px_-4px_16px_rgba(0,0,0,0.08)] flex justify-around items-center h-16 px-sm pb-safe">
-                <div class="flex flex-col items-center justify-center text-on-secondary-container">
-                    <span class="material-symbols-outlined" data-icon="explore">explore</span>
-                    <span class="font-caption text-caption">Khám phá</span>
-                </div>
-                <div class="flex flex-col items-center justify-center text-on-secondary-container">
-                    <span class="material-symbols-outlined" data-icon="favorite">favorite</span>
-                    <span class="font-caption text-caption">Yêu thích</span>
-                </div>
-                <div class="flex flex-col items-center justify-center text-on-secondary-container">
-                    <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
-                    <span class="font-caption text-caption">Giỏ hàng</span>
-                </div>
-                <div
-                    class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
-                    <span class="material-symbols-outlined" data-icon="person">person</span>
-                    <span class="font-caption text-caption">Tôi</span>
-                </div>
-            </nav>
         </div>
+
     </div>
+    </main>
+
+    <nav
+        class="fixed bottom-0 w-full rounded-t-xl z-50 md:hidden bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-md shadow-[0px_-4px_16px_rgba(0,0,0,0.08)] flex justify-around items-center h-16 px-sm pb-safe">
+        <div class="flex flex-col items-center justify-center text-on-secondary-container">
+            <span class="material-symbols-outlined" data-icon="explore">explore</span>
+            <span class="font-caption text-caption">Khám phá</span>
+        </div>
+        <div class="flex flex-col items-center justify-center text-on-secondary-container">
+            <span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+            <span class="font-caption text-caption">Yêu thích</span>
+        </div>
+        <div class="flex flex-col items-center justify-center text-on-secondary-container">
+            <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+            <span class="font-caption text-caption">Giỏ hàng</span>
+        </div>
+        <div
+            class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+            <span class="material-symbols-outlined" data-icon="person">person</span>
+            <span class="font-caption text-caption">Tôi</span>
+        </div>
+    </nav>
+</div>
+</div>
 </div>
 <!-- Mobile Sticky Cart -->
 <div class="lg:hidden fixed bottom-0 left-0 w-full p-sm bg-white border-t border-outline-variant z-50 shadow-2xl">

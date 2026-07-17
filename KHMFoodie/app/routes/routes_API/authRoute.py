@@ -7,3 +7,4 @@ auth_local_bp.add_url_rule("/login", view_func=LoginController.login, methods=["
 auth_local_bp.add_url_rule("/logout", view_func=LoginController.logout, methods=["GET"])
 auth_local_bp.add_url_rule("/register", view_func=LoginController.register, methods=["POST"])
 auth_local_bp.add_url_rule("/update-profile", view_func=LoginController.update_profile, methods=["PUT"])
+auth_local_bp.add_url_rule("/register-restaurant", view_func=LoginController.register_restaurant, methods=["POST"])
