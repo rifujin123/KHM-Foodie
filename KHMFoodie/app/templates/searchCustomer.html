@@ -94,55 +94,55 @@
         <!-- Dish Grid -->
         <div id="dish-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
             {% for d in dishes %}
-            <div class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300"
-                data-price="{{ d.price }}"">
+            <div class="group bg-white rounded-xl overflow-hidden custom-shadow hover:-translate-y-1 transition-all duration-300 dish-card"
+                data-price="{{ d.price }}">
                 <div class=" relative h-48">
-                <img class="w-full h-full object-cover" src="{{ d.image }}" alt="{{ d.name }}">
-                <!-- Price badge -->
-                <div class="absolute top-3 right-3 bg-primary text-on-primary px-2 py-1 rounded-lg font-label-md">
-                    {{ "{:,.0f}".format(d.price) }}đ
+                    <img class="w-full h-full object-cover" src="{{ d.image }}" alt="{{ d.name }}">
+                    <!-- Price badge -->
+                    <div class="absolute top-3 right-3 bg-primary text-on-primary px-2 py-1 rounded-lg font-label-md">
+                        {{ "{:,.0f}".format(d.price) }}đ
+                    </div>
+                    <!-- Category badge -->
+                    <div
+                        class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-caption font-bold">
+                        {{ d.category.value if d.category else '' }}
+                    </div>
                 </div>
-                <!-- Category badge -->
-                <div
-                    class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-caption font-bold">
-                    {{ d.category.value if d.category else '' }}
+                <div class="p-sm space-y-xs">
+                    <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">{{ d.name
+                        }}</h3>
+                    <p class="text-on-surface-variant text-sm line-clamp-2">{{ d.description }}</p>
+                    <!-- Restaurant info -->
+                    <div class="flex items-center gap-2 pt-1">
+                        <img class="w-6 h-6 rounded-full object-cover" src="{{ d.restaurant.avatar }}">
+                        <span class="text-body-md text-secondary">{{ d.restaurant.name }}</span>
+                    </div>
                 </div>
             </div>
-            <div class="p-sm space-y-xs">
-                <h3 class="font-headline-md text-headline-md group-hover:text-primary transition-colors">{{ d.name
-                    }}</h3>
-                <p class="text-on-surface-variant text-sm line-clamp-2">{{ d.description }}</p>
-                <!-- Restaurant info -->
-                <div class="flex items-center gap-2 pt-1">
-                    <img class="w-6 h-6 rounded-full object-cover" src="{{ d.restaurant.avatar }}">
-                    <span class="text-body-md text-secondary">{{ d.restaurant.name }}</span>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
 
-    <!-- Xem thêm cho dish -->
-    <div id="show-more-dish-wrapper" class="text-center mt-md {% if dishes|length <= 6 %}hidden{% endif %}">
-        <button id="show-more-dish-btn"
-            class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 transition-all duration-200"
-            onclick="showAllDishes()">
-            <span>Xem thêm món ăn</span>
-            <span class="material-symbols-outlined text-[18px]">expand_more</span>
-        </button>
-    </div>
-    {% endif %}
+        <!-- Xem thêm cho dish -->
+        <div id="show-more-dish-wrapper" class="text-center mt-md {% if dishes|length <= 6 %}hidden{% endif %}">
+            <button id="show-more-dish-btn"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 transition-all duration-200"
+                onclick="showAllDishes()">
+                <span>Xem thêm món ăn</span>
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+            </button>
+        </div>
+        {% endif %}
 
 
-    <!-- Xem Thêm Button -->
-    <div id="show-more-wrapper" class="text-center {% if restaurants|length <= 6 %}hidden{% endif %}">
-        <button id="show-more-btn" onclick="showAllRestaurants()"
-            class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 transition-all duration-200">
-            <span>Xem thêm nhà hàng</span>
-            <span class="material-symbols-outlined text-[18px]">expand_more</span>
-        </button>
+        <!-- Xem Thêm Button -->
+        <div id="show-more-wrapper" class="text-center {% if restaurants|length <= 6 %}hidden{% endif %}">
+            <button id="show-more-btn" onclick="showAllRestaurants()"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 transition-all duration-200">
+                <span>Xem thêm nhà hàng</span>
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+            </button>
+        </div>
     </div>
-</div>
 </div>
 
 <script>
