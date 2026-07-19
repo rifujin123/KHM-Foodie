@@ -69,7 +69,7 @@
             <div class="relative flex-grow max-w-md">
                 <span
                     class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
-                <input
+                <input id="dish-search-input"
                     class="w-full pl-10 pr-4 py-2 rounded-full border border-outline-variant bg-surface-container-low focus:outline-none focus:border-primary text-body-md"
                     placeholder="Tìm kiếm món ăn..." type="text">
             </div>
@@ -80,23 +80,23 @@
                 <div class="lg:col-span-8">
                     <div class="flex gap-sm overflow-x-auto no-scrollbar pb-xs">
                         <button
-                            class="px-md py-xs rounded-full bg-primary text-white font-label-md whitespace-nowrap">Tất
-                            cả</button>
+                            class="dish-category-btn px-md py-xs rounded-full bg-primary text-white font-label-md whitespace-nowrap"
+                            data-category="all">Tất cả</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món
-                            chính</button>
+                            class="dish-category-btn px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap"
+                            data-category="Món chính">Món chính</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món
-                            khai vị</button>
+                            class="dish-category-btn px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap"
+                            data-category="Món khai vị">Món khai vị</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Món
-                            tráng miệng</button>
+                            class="dish-category-btn px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap"
+                            data-category="Món tráng miệng">Món tráng miệng</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Đồ
-                            uống</button>
+                            class="dish-category-btn px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap"
+                            data-category="Đồ uống">Đồ uống</button>
                         <button
-                            class="px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap">Đồ
-                            ăn kèm</button>
+                            class="dish-category-btn px-md py-xs rounded-full bg-surface-container-high text-secondary hover:bg-primary-container hover:text-primary transition-colors font-label-md whitespace-nowrap"
+                            data-category="Món ăn kèm">Món ăn kèm</button>
                     </div>
 
                     <div id="dish-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-md pb-md">
@@ -348,7 +348,7 @@
 
     }
 
-    function renderDishes(dishes) {
+    function renderDishes(dishes, emptyMessage = 'Chưa có món ăn nào') {
         const container = document.getElementById('dish-grid');
         if (!container) return;
 
@@ -356,7 +356,7 @@
             container.innerHTML = `
             <div class="col-span-full text-center py-xl text-on-surface-variant">
                 <span class="material-symbols-outlined text-5xl mb-sm">restaurant_menu</span>
-                <p class="text-body-md">Chưa có món ăn nào</p>
+                <p class="text-body-md">${emptyMessage}</p>
             </div>`;
             return;
         }
@@ -380,6 +380,34 @@
     `).join('');
     }
 
+    let allDishes = [];
+    let currentCategory = 'all';
+
+    function applyDishFilters() {
+        const dishSearchInput = document.getElementById('dish-search-input');
+        const keyword = dishSearchInput ? dishSearchInput.value.trim().toLowerCase() : '';
+
+        const filteredDishes = allDishes.filter(d => {
+            const name = (d.name || '').toLowerCase();
+            const description = (d.description || '').toLowerCase();
+            const category = d.category || '';
+
+            const matchesKeyword =
+                !keyword ||
+                name.includes(keyword) ||
+                description.includes(keyword) ||
+                category.toLowerCase().includes(keyword);
+
+            const matchesCategory =
+                currentCategory === 'all' ||
+                category === currentCategory;
+
+            return matchesKeyword && matchesCategory;
+        });
+
+        renderDishes(filteredDishes, 'Không tìm thấy món ăn phù hợp');
+    }
+
     document.addEventListener('DOMContentLoaded', async function () {
         const pathParts = window.location.pathname.split('/');
         const id = pathParts[pathParts.length - 1];
@@ -390,7 +418,30 @@
             fetchDishesData(id)
         ]);
         renderRestaurantDetail(data);
-        renderDishes(dishes);
+        allDishes = dishes;
+        renderDishes(allDishes);
+
+        const dishSearchInput = document.getElementById('dish-search-input');
+
+        if (dishSearchInput) {
+            dishSearchInput.addEventListener('input', applyDishFilters);
+        }
+
+        document.querySelectorAll('.dish-category-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                currentCategory = this.dataset.category;
+
+                document.querySelectorAll('.dish-category-btn').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('bg-surface-container-high', 'text-secondary');
+                });
+
+                this.classList.remove('bg-surface-container-high', 'text-secondary');
+                this.classList.add('bg-primary', 'text-white');
+
+                applyDishFilters();
+            });
+        });
     });
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
