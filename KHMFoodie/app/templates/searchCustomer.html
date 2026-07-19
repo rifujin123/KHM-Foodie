@@ -69,8 +69,8 @@
         <!-- Restaurant Grid -->
         <div id="restaurant-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
             {% for r in restaurants %}
-            {% with id=r.id, cover_image=r.cover_image or r.avatar, name=r.name, cuisine_type=r.cuisine_type,
-            address=r.address,
+            {% with id=r.id, cover_image=r.cover_image or (r.user.avatar if r.user else ''), name=r.name, cuisine_type=r.cuisine_type,
+            address=r.user.address if r.user else '',
             opening_time=r.opening_time, closing_time=r.closing_time %}
             <div
                 class="w-full group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-2 transition-all duration-300 restaurant-card{% if loop.index > 6 %} hidden{% endif %}">
@@ -114,7 +114,7 @@
                     <p class="text-on-surface-variant text-sm line-clamp-2">{{ d.description }}</p>
                     <!-- Restaurant info -->
                     <div class="flex items-center gap-2 pt-1">
-                        <img class="w-6 h-6 rounded-full object-cover" src="{{ d.restaurant.avatar }}">
+                        <img class="w-6 h-6 rounded-full object-cover" src="{{ d.restaurant.user.avatar if d.restaurant and d.restaurant.user else '' }}">
                         <span class="text-body-md text-secondary">{{ d.restaurant.name }}</span>
                     </div>
                 </div>

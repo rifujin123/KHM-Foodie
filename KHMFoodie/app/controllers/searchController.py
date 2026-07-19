@@ -14,8 +14,8 @@ class SearchController:
             {
                 "id": r.id,
                 "name": r.name,
-                "address": r.address,
-                "avatar": r.avatar,
+                "address": r.user.address if r.user else None,
+                "avatar": r.user.avatar if r.user else None,
                 "cover_image": r.cover_image,
                 "description": r.description,
                 "cuisine_type": r.cuisine_type.value if r.cuisine_type else None,
@@ -35,7 +35,7 @@ class SearchController:
                 "category": d.category.value if d.category else None,
                 "restaurant_id": d.restaurant_id,
                 "restaurant_name": d.restaurant.name if d.restaurant else None,
-                "restaurant_avatar": d.restaurant.avatar if d.restaurant else None
+                "restaurant_avatar": d.restaurant.user.avatar if d.restaurant and d.restaurant.user else None
             }
             for d in dishes
         ]

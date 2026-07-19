@@ -1,39 +1,43 @@
-from app.models.model import Restaurant
-from app.models.model import Dish
+from app.models.model import Restaurant, User, Dish
+from app.extensions import db
 from sqlalchemy import func
+
 
 class RestaurantsDao:
     
     @staticmethod
     def get_all_restaurants():
-        return Restaurant.query.with_entities(
+        return db.session.query(
             Restaurant.id,
-            func.coalesce(Restaurant.cover_image, Restaurant.avatar).label("cover_image"),
+            func.coalesce(Restaurant.cover_image, User.avatar).label("cover_image"),
             Restaurant.name,
             Restaurant.cuisine_type,
-            Restaurant.address,
+            User.address,
             Restaurant.opening_time,
             Restaurant.closing_time
-        ).filter_by(active=True).all()
+        ).join(User, Restaurant.id == User.id
+        ).filter(Restaurant.active == True).all()
 
     @staticmethod
     def get_restaurant_by_id(restaurant_id):
-        return Restaurant.query.filter_by(id=restaurant_id, active=True).first()
+        return Restaurant.query.options(
+            db.joinedload(Restaurant.user)
+        ).filter_by(id=restaurant_id, active=True).first()
 
     @staticmethod
     def search_restaurants(keyword):
-        if not keyword:
-            return Restaurant.query.filter_by(active=True).all()
-        return Restaurant.query.filter(
-            Restaurant.active == True,
-            Restaurant.name.ilike(f"%{keyword}%")
-        ).all()
+        query = Restaurant.query.options(db.joinedload(Restaurant.user)).filter(Restaurant.active == True)
+        if keyword:
+            query = query.filter(Restaurant.name.ilike(f"%{keyword}%"))
+        return query.all()
 
     @staticmethod
     def search_dishes(keyword):
         if not keyword:
             return []
-        return Dish.query.filter(
+        return Dish.query.options(
+            db.joinedload(Dish.restaurant).joinedload(Restaurant.user)
+        ).filter(
             Dish.active == True,
             Dish.name.ilike(f"%{keyword}%")
         ).all()

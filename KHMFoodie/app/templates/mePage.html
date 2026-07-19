@@ -53,8 +53,9 @@
             <!-- Cover Photo & Logo -->
             <div class="relative">
                 <div class="h-48 w-full relative bg-surface-container-high group">
-                    {% if current_user.cover_image %}
-                    <img class="w-full h-full object-cover" src="{{ current_user.cover_image }}" alt="Ảnh bìa nhà hàng">
+                    {% set rest = current_user.restaurant %}
+                    {% if rest and rest.cover_image %}
+                    <img class="w-full h-full object-cover" src="{{ rest.cover_image }}" alt="Ảnh bìa nhà hàng">
                     {% else %}
                     <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCM3FpqMHQ3LrwOuGoX4NcogFKnyl7VCBP2ASzAO2b3981oCcqEq7vwn1A-E89i5H3rIZthDz3CXEfnsAMHRmLPqqOSMrutB9Rv9VX-wHvHOgXSIge0FcAMVbaBfOYCA3HCHkBeswOly5liMY25V0M9u3auj3Lt0P796fvlBjqN0rNhEdd2pHpH6HX9l8wSCsUnanwloJ_F8LAXbGOzIwWEIeML_jrzswGx5UGBgWHvQc-JXsofbFv3" alt="Ảnh bìa nhà hàng">
                     {% endif %}
@@ -85,14 +86,14 @@
                         <label class="text-label-md font-bold text-on-surface-variant">Loại hình ẩm thực</label>
                         <select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright text-body-md appearance-none" id="restaurant-cuisine">
                             {% for key, label in cuisine_types %}
-                            <option value="{{ key }}" {% if current_user.cuisine_type and current_user.cuisine_type.name == key %}selected{% endif %}>{{ label }}</option>
+                            <option value="{{ key }}" {% if rest and rest.cuisine_type and rest.cuisine_type.name == key %}selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
                 <div class="space-y-2">
                     <label class="text-label-md font-bold text-on-surface-variant">Mô tả ngắn</label>
-                    <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright text-body-md resize-none" id="restaurant-description" rows="3">{{ current_user.description if current_user.description else "Thương hiệu ẩm thực với nhiều năm kinh nghiệm." }}</textarea>
+                    <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright text-body-md resize-none" id="restaurant-description" rows="3">{{ rest.description if rest and rest.description else "Thương hiệu ẩm thực với nhiều năm kinh nghiệm." }}</textarea>
                 </div>
             </div>
         </section>

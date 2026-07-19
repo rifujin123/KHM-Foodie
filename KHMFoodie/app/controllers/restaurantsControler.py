@@ -33,11 +33,12 @@ class RestaurantsController:
     def get_restaurant_by_id(restaurant_id):
         restaurant = RestaurantsDao.get_restaurant_by_id(restaurant_id)
         if restaurant:
+            user = restaurant.user
             return jsonify({
                 "id": restaurant.id,
                 "name": restaurant.name,
-                "address": restaurant.address,
-                "avatar": restaurant.avatar,
+                "address": user.address if user else None,
+                "avatar": user.avatar if user else None,
                 "cover_image": restaurant.cover_image,
                 "description": restaurant.description,
                 "cuisine_type": restaurant.cuisine_type.value if restaurant.cuisine_type else None,
@@ -47,13 +48,13 @@ class RestaurantsController:
                 "closing_time":
                     restaurant.closing_time.strftime("%H:%M")
                     if restaurant.closing_time else None,
-                "phonenumber": restaurant.phonenumber,
-                "email": restaurant.email,
+                "phonenumber": user.phonenumber if user else None,
+                "email": user.email if user else None,
                 "status": restaurant.status,
                 "tax_code": restaurant.tax_code,
-                "username": restaurant.username,
-                "role": restaurant.role.value if restaurant.role else None,
-                "auth_provider": restaurant.auth_provider,
+                "username": user.username if user else None,
+                "role": user.role.value if user and user.role else None,
+                "auth_provider": user.auth_provider if user else None,
                 "active": restaurant.active,
                 "created_at": restaurant.created_at.isoformat() if restaurant.created_at else None,
                 "created_updated_at": restaurant.created_updated_at.isoformat() if restaurant.created_updated_at else None

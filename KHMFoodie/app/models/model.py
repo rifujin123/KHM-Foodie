@@ -30,9 +30,6 @@ class UserRole(RoleEnum):
 
 class User(Base, UserMixin):
     __tablename__ = 'user'
-    __mapper_args__ = {
-        'polymorphic_identity': UserRole.CUSTOMER,
-    }
     username = Column(String(150), unique=True, nullable=True)
     password = Column(String(150), nullable=True)
     phonenumber = Column(String(150), nullable=True)
@@ -41,6 +38,11 @@ class User(Base, UserMixin):
     address = Column(String(300), nullable=True)
     role = Column(Enum(UserRole), default=UserRole.CUSTOMER)
     auth_provider = Column(String(50), default='local')
+    restaurant = relationship(
+        'Restaurant',
+        backref=backref('user', uselist=False),
+        uselist=False
+    )
 
 
 class CuisineType(RoleEnum):
@@ -59,7 +61,7 @@ class CuisineType(RoleEnum):
     OTHER = "Khác"
 
 
-class Restaurant(User):
+class Restaurant(Base):
     __tablename__ = 'restaurant'
     id = Column(Integer, ForeignKey('user.id'), primary_key=True)
     description = Column(String(500), nullable=True)
@@ -69,12 +71,6 @@ class Restaurant(User):
     cuisine_type = Column(Enum(CuisineType), nullable=True)
     tax_code = Column(String(50), nullable=True)
     cover_image = Column(String(300), nullable=True)
-
-    __mapper_args__ = {
-        'polymorphic_identity': UserRole.RESTAURANT
-    }
-
-
 
 class DishCategory(RoleEnum):
     APPETIZER = "Món khai vị"

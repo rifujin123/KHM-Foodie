@@ -42,7 +42,7 @@ class UserAdmin(AdminSecureView):
 
 
 class RestaurantAdmin(AdminSecureView):
-    column_searchable_list = ['name', 'username', 'email']
+    column_searchable_list = ['name']
     column_filters = ['cuisine_type', 'status', 'active']
     column_sortable_list = ['name', 'cuisine_type', 'active', 'created_at']
     column_default_sort = ('active', False)
@@ -58,7 +58,7 @@ class RestaurantAdmin(AdminSecureView):
         'tax_code': 'Mã số thuế',
     }
 
-    column_list = ['name', 'cuisine_type', 'email', 'phonenumber', 'active']
+    column_list = ['name', 'cuisine_type', 'active']
 
 
 class DishAdmin(AdminSecureView):

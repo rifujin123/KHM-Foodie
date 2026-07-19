@@ -22,14 +22,15 @@ def me_page():
     if role == UserRole.RESTAURANT:
         layout_template = 'layout/baseRestaurent.html'
         cuisine_types = [(c.name, c.value) for c in CuisineType]
+        r = current_user.restaurant
         return render_template(
             'mePage.html',
             layout_template=layout_template,
             role='Restaurant',
             cuisine_types=cuisine_types,
-            opening_time=current_user.opening_time.strftime('%H:%M') if current_user.opening_time else '06:30',
-            closing_time=current_user.closing_time.strftime('%H:%M') if current_user.closing_time else '22:30',
-            is_open=current_user.status if current_user.status is not None else True
+            opening_time=r.opening_time.strftime('%H:%M') if r and r.opening_time else '06:30',
+            closing_time=r.closing_time.strftime('%H:%M') if r and r.closing_time else '22:30',
+            is_open=r.status if r and r.status is not None else True
         )
 
     elif role == UserRole.CUSTOMER:

@@ -1,8 +1,6 @@
-from app.models.model import User, hash_password
+from app.models.model import User, Restaurant, UserRole, CuisineType, hash_password
 from app.extensions import db
 import hashlib
-from app import db
-from app.models.model import User, Restaurant, UserRole, CuisineType
 
 class UserDao:
 
@@ -75,8 +73,13 @@ def add_user(
         common_data['role'] = role
 
     if is_restaurant:
-        user = Restaurant(
-            **common_data,
+        user = User(**common_data)
+        db.session.add(user)
+        db.session.flush()
+
+        restaurant = Restaurant(
+            id=user.id,
+            name=common_data['name'],
             description=kwargs.get('description'),
             opening_time=kwargs.get('opening_time'),
             closing_time=kwargs.get('closing_time'),
@@ -85,10 +88,11 @@ def add_user(
             cover_image=kwargs.get('cover_image'),
             active=False
         )
+        db.session.add(restaurant)
     else:
         user = User(**common_data)
+        db.session.add(user)
 
-    db.session.add(user)
     db.session.commit()
     return user
 

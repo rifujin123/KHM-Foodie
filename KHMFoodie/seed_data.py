@@ -47,7 +47,7 @@ def seed():
         restaurant_map = {}
 
         for r in restaurants_data:
-            new_restaurant = Restaurant(
+            new_user = User(
                 name=r["name"],
                 username=r["username"],
                 password=hash_password(r["password"]),
@@ -55,6 +55,14 @@ def seed():
                 email=r.get("email"),
                 address=r.get("address"),
                 avatar=r.get("avatar"),
+                role=UserRole.RESTAURANT
+            )
+            db.session.add(new_user)
+            db.session.flush()
+
+            new_restaurant = Restaurant(
+                id=new_user.id,
+                name=r["name"],
                 cover_image=r.get("cover_image"),
                 description=r.get("description"),
                 status=r.get("status", True),
@@ -62,7 +70,6 @@ def seed():
                 closing_time=parse_time(r.get("closing_time")),
                 cuisine_type=CuisineType[r["cuisine_type"]] if r.get("cuisine_type") else None,
                 tax_code=r.get("tax_code"),
-                role=UserRole.RESTAURANT
             )
             db.session.add(new_restaurant)
             restaurant_map[r["username"]] = new_restaurant
