@@ -1,9 +1,45 @@
-from app.models.model import Restaurant, User, Dish
+from app.models.model import Restaurant, User, Dish, RestaurantApprovalStatus
 from app.extensions import db
 from sqlalchemy import func
 
 
 class RestaurantsDao:
+
+    @staticmethod
+    def get_restaurants_by_status(status, page=1, per_page=10):
+        query = Restaurant.query.options(
+            db.joinedload(Restaurant.user)
+        )
+        if status and status.lower() != "all":
+            try:
+                status_enum = RestaurantApprovalStatus[status.upper()]
+                query = query.filter(Restaurant.approval_status == status_enum)
+            except KeyError:
+                pass
+        query = query.order_by(Restaurant.created_at.desc())
+        return query.paginate(page=page, per_page=per_page, error_out=False)
+
+    @staticmethod
+    def approve_restaurant(restaurant_id):
+        r = Restaurant.query.get(restaurant_id)
+        if not r:
+            return None
+        r.approval_status = RestaurantApprovalStatus.APPROVED
+        if r.user:
+            r.user.active = True
+        db.session.commit()
+        return r
+
+    @staticmethod
+    def reject_restaurant(restaurant_id):
+        r = Restaurant.query.get(restaurant_id)
+        if not r:
+            return None
+        r.approval_status = RestaurantApprovalStatus.REJECTED
+        if r.user:
+            r.user.active = False
+        db.session.commit()
+        return r
     
     @staticmethod
     def get_all_restaurants():
