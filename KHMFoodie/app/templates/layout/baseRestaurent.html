@@ -161,6 +161,7 @@
             ('users', 'Người dùng', 'people', '/admin/user/'),
             ('restaurants', 'Nhà hàng', 'storefront', '/admin/restaurant/'),
             ('dishes', 'Món ăn', 'restaurant_menu', '/admin/dish/'),
+            ('pending-approval', 'Duyệt nhà hàng', 'approval', '/admin/restaurants/pending'),
             ] %}
             {% else %}
             {% set sidebar_menu_items = [
@@ -211,8 +212,8 @@
         <header
             class="h-20 bg-surface shadow-[0px_4px_20px_rgba(0,0,0,0.05)] flex items-center justify-between px-gutter z-40 sticky top-0">
             <div class="flex items-center space-x-4">
-                <!-- Search Bar -->
-                {% block itemHeader %}
+                {% block itemHeader %}{% endblock %}
+                <!-- Notification bell: always visible -->
                 <div class="relative">
                     <a href="/notication">
                         <span
@@ -221,7 +222,6 @@
                     </a>
 
                 </div>
-                {% endblock %}
             </div>
         </header>
 

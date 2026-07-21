@@ -73,6 +73,7 @@ def add_user(
         common_data['role'] = role
 
     if is_restaurant:
+        common_data['active'] = False
         user = User(**common_data)
         db.session.add(user)
         db.session.flush()
