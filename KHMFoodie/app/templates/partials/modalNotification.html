@@ -146,6 +146,8 @@
       titleEl.textContent = opts.title || '';
       if (opts.icon) {
         iconEl.classList.remove('hidden');
+        iconEl.className = 'material-symbols-outlined';
+        iconEl.classList.add(opts.iconClass || 'text-primary');
         iconEl.textContent = opts.icon;
       } else {
         iconEl.classList.add('hidden');

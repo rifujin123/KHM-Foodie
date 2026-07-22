@@ -70,6 +70,7 @@ class Restaurant(Base):
     __tablename__ = 'restaurant'
     id = Column(Integer, ForeignKey('user.id'), primary_key=True)
     description = Column(String(500), nullable=True)
+    rejection_reason = Column(String(500), nullable=True)
     status = Column(Boolean, default=True)
     opening_time = Column(Time, nullable=True)
     closing_time = Column(Time, nullable=True)
