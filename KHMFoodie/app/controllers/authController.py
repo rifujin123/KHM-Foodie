@@ -4,6 +4,7 @@ from app.dao.userDao import add_user, check_userEmail
 from app.dao.userDao import UserDao
 from flask_login import login_user, logout_user, login_required, current_user
 import cloudinary.uploader
+from app.service.notificationByEmail import send_account_registration_email, send_restaurant_registration_pending_email 
 
 class LoginController:
 
@@ -21,24 +22,29 @@ class LoginController:
             return jsonify({"message": "Username and password required"}), 400
 
         user = UserDao.get_by_username(username)
+        if user is None:
+            return jsonify({"message": "Username is incorrect"}), 403
+
         check_active = UserDao.check_userActive(UserDao, user)
         print("check_active:", check_active)
         if check_active is False:
             return jsonify({"message": "User account is inactive"}), 403
-        else:
-            if user and user.password == hash_password(password):
-                login_user(user, remember=remember)
 
-            redirect_url = '/admin/' if user.role == UserRole.ADMIN else '/'
-            return jsonify({
-                "message": "Login successful",
-                "redirect": redirect_url,
-                "user": {
-                    "id": user.id,
-                    "name": user.name,
-                    "role": user.role.value if user.role else None
-                }
-            }), 200
+        if user.password != hash_password(password):
+            return jsonify({"message": "Password is incorrect"}), 403
+
+        login_user(user, remember=remember)
+        redirect_url = '/admin/' if user.role == UserRole.ADMIN else '/'
+        return jsonify({
+            "message": "Login successful",
+            "redirect": redirect_url,
+            "user": {
+                "id": user.id,
+                "name": user.name,
+                "role": user.role.value if user.role else None
+            }
+        }), 200
+        
 
     @staticmethod
     def logout():
@@ -109,6 +115,10 @@ class LoginController:
             return jsonify({"message": "Username already exists"}), 409
 
         add_user(name, phone, username, password, email)
+        send_account_registration_email(
+            recipient=email,
+            username=name
+        )
         return jsonify({"message": "Registration successful"}), 201
 
     @staticmethod
@@ -163,5 +173,10 @@ class LoginController:
             tax_code=tax_code,
             avatar=avatar_path,
             cover_image=avatar_path,
+        )
+
+        send_restaurant_registration_pending_email(
+            recipient=email,
+            username=name
         )
         return jsonify({"message": "Đăng ký nhà hàng thành công!"}), 201
