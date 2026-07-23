@@ -2,7 +2,7 @@ import hashlib
 from datetime import datetime, time as dtime
 from sqlalchemy import (
     Column, Integer, String, DateTime, Boolean,
-    Float, Enum, ForeignKey, Time
+    Float, Enum, ForeignKey, Time, UniqueConstraint
 )
 from sqlalchemy.orm import relationship, backref
 from flask_login import UserMixin
@@ -108,8 +108,12 @@ class Dish(Base):
 
 class Cart(Base):
     __tablename__ = 'cart'
+    __table_args__ = (
+        UniqueConstraint('user_id', 'restaurant_id', name='uq_cart_user_restaurant'),
+    )
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
+    note = Column(String(300), nullable=True)
 
 class Voucher(Base):
     __tablename__ = 'voucher'
@@ -127,6 +131,9 @@ class Voucher(Base):
 
 class CartItems(Base):
     __tablename__ = 'cart_items'
+    __table_args__ = (
+        UniqueConstraint('cart_id', 'dish_id', name='uq_cart_items_cart_dish'),
+    )
     cart_id = Column(Integer, ForeignKey('cart.id'), nullable=False)
     dish_id = Column(Integer, ForeignKey('dish.id'), nullable=False)
     quantity = Column(Integer, default=1, nullable=False)
