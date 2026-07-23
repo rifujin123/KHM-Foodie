@@ -1,8 +1,9 @@
-from flask import request, jsonify, redirect
+from flask import request, jsonify, redirect, current_app
 from app.models.model import hash_password, CuisineType, UserRole
 from app.dao.userDao import add_user, check_userEmail
 from app.dao.userDao import UserDao
 from flask_login import login_user, logout_user, login_required, current_user
+from app.service.notificationByFCM import send_push_notification
 import cloudinary.uploader
 
 class LoginController:
@@ -108,7 +109,12 @@ class LoginController:
         if UserDao.get_by_username(username):
             return jsonify({"message": "Username already exists"}), 409
 
-        add_user(name, phone, username, password, email)
+        user = add_user(name, phone, username, password, email)
+        try:
+            send_push_notification(user.id, "Chào mừng bạn đến với CraveConnect!",
+                                   "Cảm ơn bạn đã đăng ký tài khoản. Hãy khám phá hàng ngàn món ngon nhé!")
+        except Exception as e:
+            current_app.logger.error(f"Gửi notification đăng ký thất bại: {e}")
         return jsonify({"message": "Registration successful"}), 201
 
     @staticmethod
@@ -149,7 +155,7 @@ class LoginController:
             res = cloudinary.uploader.upload(avatar_file)
             avatar_path = res["secure_url"]
 
-        add_user(
+        user = add_user(
             name=name,
             phonenumber=phone,
             username=username,
@@ -164,4 +170,9 @@ class LoginController:
             avatar=avatar_path,
             cover_image=avatar_path,
         )
+        try:
+            send_push_notification(user.id, "Đăng ký nhà hàng thành công!",
+                                   "Nhà hàng của bạn đang chờ được duyệt. Chúng tôi sẽ thông báo khi có kết quả.")
+        except Exception as e:
+            current_app.logger.error(f"Gửi notification đăng ký nhà hàng thất bại: {e}")
         return jsonify({"message": "Đăng ký nhà hàng thành công!"}), 201

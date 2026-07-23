@@ -10,6 +10,7 @@ from flask_admin import Admin
 from app.models.model import User, Restaurant, Dish
 from app.admin import UserAdmin, RestaurantAdmin, DishAdmin, AdminSecureIndexView
 from flask_admin.theme import Bootstrap4Theme
+from app.extensions import db, mail, init_firebase
 
 import cloudinary
 
@@ -40,10 +41,16 @@ def create_app(config_name='dev'):
     app = Flask(__name__)
 
     app.config.from_object(config_map[config_name])
+    cred_path = os.getenv('FIREBASE_CREDENTIALS_PATH')
+    if cred_path and not os.path.isabs(cred_path):
+        cred_path = os.path.join(app.root_path, '..', cred_path)
+    app.config['FIREBASE_CREDENTIALS_PATH'] = cred_path
 
     # Init extensions
     login_manager.init_app(app)
     db.init_app(app)
+    mail.init_app(app)
+    init_firebase(app)  
 
     # Admin
     from app.models.model import User, Restaurant, Dish
